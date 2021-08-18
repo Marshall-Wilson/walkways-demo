@@ -8,13 +8,19 @@ const Content = () => {
         <div>
             <div id="problem">
                 <h1>Introduction</h1>
-                <h2>Problem Statement</h2>
-                <p>The goal of this algorithm is to find the <i>optimal location </i>  
-                     for a <i>moving walkway</i> in a plane containing a number of
-                    sources and destinations. 
+                <p>A common problem in the field of optimization is to find the 
+                    best location for a facility. These problems can range from
+                    finding the cheapest location for a factory, to the most profitable
+                    new airline route, to the best place to build an escalator in
+                    a mall. 
+                </p>
+                <p>On this page, we will explore methods for solving one particular
+                    formulation of this type of problem. That is, finding the 
+                    <i>optimal location </i> for a <i>moving walkway</i> in a 
+                    plane containing a number of sources and destinations. 
                 </p>
                 <h3>Definitions</h3>
-                <p>A <i>moving walkway</i> in this case is defined as any two points 
+                <p>A <i>moving walkway</i> is any pair of points 
                     between which movement is faster than normal. It could represent
                     a highway, a flight path, or an actual moving walkway. 
                 </p>

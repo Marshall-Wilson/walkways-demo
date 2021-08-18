@@ -36,34 +36,42 @@ const Demo = ({ numCols, numRows }) => {
 
         let sourceButton = p5.createButton("Select Sources");
         let destButton = p5.createButton("Select Destinations");
-        let eraseButton = p5.createButton("Erase Cells");
-        let calcButton = p5.createButton("Calculate Path");
+        let eraseButton = p5.createButton("Erase");
         let resetButton = p5.createButton("Reset");
-        let radiusButton = p5.createButton("Draw Longest Path");
-        let angleInput = p5.createInput();
-        let angleButton = p5.createButton("Approximate Path");
+        let calcButton = p5.createButton("Calculate Path");
+        let angleSelect = p5.createSelect(false);
+        for (let i = 1; i <= 20; i++){
+            angleSelect.option("# of angles: " + i,i);
+        }
+        angleSelect.selected(8);
+        let speedSelect = p5.createSelect(false);
+        for (let i = 2; i <= 40; i++){
+            speedSelect.option("Path Speed: " + i,i);
+        }
+        speedSelect.selected(2);
 
-        angleButton.mousePressed(() => {
-            resetPath();
-            [path, approxPath] = solver.approxOptimalPath(map, p5, angleInput.value());
-            setTimeout(p5.redraw, 12000);
-        })
+
         sourceButton.mousePressed(() => { selecting = "source" });
         destButton.mousePressed(() => { selecting = "dest" });
         eraseButton.mousePressed(() => { selecting = "erase" });
         calcButton.mousePressed(() => {
-            makePath(p5);
+            resetPath();
+            let tempPath = null;
+            let tempApprox = null;
+            map.pathSpeed = speedSelect.value();
+            [tempPath, tempApprox] = solver.approxOptimalPath(map, p5, angleSelect.value());
+            setTimeout(() => {
+                path = tempPath;
+                approxPath = tempApprox;
+                p5.redraw();
+            }, 12000);
         });
+
         resetButton.mousePressed(() => {
             map = new Map(numCols, numRows, cellSize, pathSpeed);
             resetPath();
             p5.redraw();
         });
-        radiusButton.mousePressed(() => {
-            if (path !== null) {
-                path.drawRadius(p5);
-            }
-        })
 
         map = new Map(numCols, numRows, cellSize, pathSpeed);
         map.generateCells();
@@ -78,40 +86,40 @@ const Demo = ({ numCols, numRows }) => {
         });
     }
 
-    const approxOptimalPath = (p5, numAngles) => {
-        let minPath = new Path();
-        minPath.radius = 1000;
-        for (let i = 0; i < numAngles; i++) {
-            setTimeout(() => {
-                approxPath = solver.findAnglePath(map, i * 2 * Math.PI / numAngles);
-                approxPath.color = "blue";
-                if (approxPath.radius < minPath.radius) {
-                    minPath = approxPath;
-                }
-
-                p5.redraw();
-                console.log("time");
-            }, 2000);
-        }
-        path = solver.findOptimalPath(map);
-        approxPath = minPath;
-        setTimeout(p5.redraw, 2000 * numAngles);
-    }
-
     const draw = (p5) => {
         p5.background(0);
         map.drawMap(p5);
         if (path !== null) {
             path.drawPath(p5);
+            p5.fill("purple");
+            p5.stroke("purple");
+            p5.strokeWeight(8);
+            p5.line(map.cellSize * 17, map.cellSize / 2, map.cellSize * 19, map.cellSize / 2);
+            p5.strokeWeight(0);
+            p5.textSize(16);
+            p5.text("True Optimal Path", map.cellSize * 12, 2 * map.cellSize / 3);
+        
         }
         if (approxPath !== null) {
             approxPath.drawPath(p5);
+            p5.fill("red");
+            p5.stroke("red");
+            p5.strokeWeight(8);
+            p5.line(map.cellSize * 17, 3* map.cellSize / 2, map.cellSize * 19, 3 *map.cellSize / 2);
+            p5.strokeWeight(0);
+            p5.textSize(16);
+            p5.text("Approximated Path", map.cellSize * 12, 5 * map.cellSize / 3);
         }
     }
 
-    return ( <div>
+    return ( 
+        <div>
         <h2> Try It Out </h2> 
-        <p> Select source and destination squares and click calculate to find the ideal walkway </p> 
+        <p> 
+            Try seeing how the blue walkways for the various angles 
+            differ from the approximately optimal walkway in red and the 
+            true optimal walkway in purple for different numbers of angles. 
+        </p>
         <Sketch setup = { setup } draw = { draw }/> 
         </div>
     )

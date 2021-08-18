@@ -26,14 +26,19 @@ const OneDDemo = ({length}) => {
             let sourceButton = p5.createButton("Select Sources");
             let destButton = p5.createButton("Select Destinations");
             let calcButton = p5.createButton("Calculate Path");
-            let resetButton = p5.createButton("Reset");
-            let speedSlider = p5.createSlider(1, parseInt(length, 10), 1);
+            let resetButton = p5.createButton("Reset"); 
+            let speedSelect = p5.createSelect(false);
+            for (let i = 2; i <= map.numCols; i++){
+                speedSelect.option("Path Speed: " + i,i);
+            }
+            speedSelect.selected(2);
+
     
-            resetButton.mousePressed(() => {reset(speedSlider)});
+            resetButton.mousePressed(() => {reset(speedSelect)});
             sourceButton.mousePressed(() => selecting = "source");
             destButton.mousePressed(() => selecting = "dest");
             calcButton.mousePressed(() => {
-                map.pathSpeed = speedSlider.value();
+                map.pathSpeed = speedSelect.value();
                 path = solver.findOptimalPath(map);
                 p5.redraw();
             })
@@ -41,13 +46,14 @@ const OneDDemo = ({length}) => {
             p5.noLoop();
         }
 
-        const reset = (speedSlider) => {
+        const reset = (speedSelect) => {
             resetPath();
+            selecting = "source";
             map = new Map(length, numRows, cellSize, pathSpeed);
             map.generateCells();
             map.markCell(0, 0, "source");
             map.markCell(map.numCols - 1, 0, "dest");
-            map.pathSpeed = speedSlider.value();
+            map.pathSpeed = speedSelect.value();
         }
     
         p5.mouseClicked = () => {
@@ -65,6 +71,18 @@ const OneDDemo = ({length}) => {
             map.drawMap(p5);
             if (path !== null) {
                 path.drawPath(p5);
+            } else {
+                p5.fill("black");
+                p5.textSize(18);
+                p5.text("0", 0, 2 * map.cellSize - 5);
+                p5.text("1", canvasSize - map.cellSize/2, 2 * map.cellSize - 5);
+                p5.textSize(16);
+                let a = ((1 - (map.pathSpeed/(2 * map.pathSpeed - 1)))/ 2);
+                let b = ((1 + (map.pathSpeed/(2 * map.pathSpeed - 1)))/ 2);
+                //p5.circle(map.cellSize * map.numCols * a + map.cellSize/2, map.cellSize/2, 5);
+                //p5.text("v / (2v - 1)",map.cellSize * map.numCols * a - map.cellSize, map.cellSize * 2  - 5)
+                //p5.circle(map.cellSize * map.numCols * b + map.cellSize/2, map.cellSize/2, 5);
+                
             }
         }
         
@@ -86,8 +104,10 @@ const OneDDemo = ({length}) => {
     
     return (
         <div>
-            <p>Try placing sources, destinations, and changing the speed of 
-                the walkway to see how it affects the walkway's location.
+            <h2>Try It Out</h2>
+            <p>Try it out for yourself by placing sources, destinations, 
+                and changing the speed of the walkway to see how it affects the 
+                walkway's location and the locations of r1, s1, r2, and s2.
             </p>
             <P5Wrapper sketch={sketch} />
         </div>

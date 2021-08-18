@@ -9,6 +9,7 @@ function App() {
       <Header/>
       <Content/>
       <Demo numCols="20" numRows="20"/>
+      <div className = "dummy"></div>
     </div>
   );
 }

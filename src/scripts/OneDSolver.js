@@ -4,7 +4,7 @@ import Location from "./Location"
 class OneDSolver {
 
     findOptimalPath = map => {
-        const limit = (map.pathSpeed / (map.numCols - 1)) / ((2 * (map.pathSpeed) / (map.numCols - 1)) - 1);
+        const limit = map.pathSpeed / (2 * map.pathSpeed - 1);
         // s is smallest destination that used walkway
         // r is largest source that uses walkway
 
@@ -23,12 +23,11 @@ class OneDSolver {
         });
         let scaledr1 = r1.col / (map.numCols - 1);
         let scaleds2 = s2.col / (map.numCols - 1);
-        let scaledSpeed = map.pathSpeed / (map.numCols - 1);
-        const s1Limit = (scaledr1 * (scaledSpeed - 1) + scaledSpeed + 1) / (3 * scaledSpeed - 1) * (map.numCols - 1);
+        const s1Limit = (scaledr1 * (map.pathSpeed - 1) + map.pathSpeed + 1) / (3 * map.pathSpeed - 1) * (map.numCols - 1);
         const r2Limit = ((((map.numCols - 1) - map.pathSpeed) * (s2.col / (map.numCols - 1) + 1)) / ((map.numCols - 1) - 3 * map.pathSpeed)) * (map.numCols - 1);
         let s1 = new Location(map.numCols - 1, 0);
         let r2 = new Location(0, 0);
-        console.log(s1Limit, r2Limit, limit);
+        console.log(s1Limit, r2Limit, limit, map.pathSpeed);
         map.cells.forEach(col => {
             col.forEach(cell => {
                 if (cell.col <= r2Limit && cell.col > r2.col && cell.source) { // r2
@@ -42,6 +41,7 @@ class OneDSolver {
         let path1 = new OneDPath(new Location(r1.col / 2, 0), new Location((s1.col + map.numCols - 1) / 2, 0), r1, s1, r2, s2, 10, map.cellSize, "purple");
         let path2 = new OneDPath(new Location(r2.col / 2, 0), new Location((s2.col + map.numCols - 1) / 2, 0), r1, s1, r2, s2, 10, map.cellSize, "purple");
         console.log(path1, path2);
+        console.log(s1, s2, map.numCols, s1.col, s2.col, (s1.col + map.numCols - 1) / 2, (s2.col + map.numCols - 1) / 2)
         if (this.computeDistance(map, r1, s1, path1) >= this.computeDistance(map, r2, s2, path2)) {
             return path1;
         } else {

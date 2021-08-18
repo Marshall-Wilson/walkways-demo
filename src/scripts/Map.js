@@ -2,7 +2,7 @@ import Cell from './Cell'
 
 class Map {
     constructor(numCols, numRows, cellSize, pathSpeed) {
-        this.numCols = numCols;
+        this.numCols = parseInt(numCols, 10);
         this.numRows = numRows;
         this.numCells = numCols * numRows;
         this.cellSize = cellSize;

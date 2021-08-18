@@ -30,17 +30,18 @@ class OneDPath {
 
         console.log("s1:", this.s1.col, "r1:", this.r1.col, "s2:", this.s2.col, "r2:", this.r2.col, "start:", this.start.col, "stop:", this.stop.col);
         p5.strokeWeight(0);
-        p5.fill(255, 0, 0);
-        p5.circle((this.s1.col * this.cellSize) + this.cellSize / 2, this.cellSize / 2, 5, 10);
-        p5.text('s1', (this.s1.col * this.cellSize), 2 * this.cellSize);
-        p5.circle((this.s2.col * this.cellSize) + this.cellSize / 2, this.cellSize / 2, 5, 10);
+        p5.textSize(16);
+        p5.fill("orangered");
+        p5.circle((this.s1.col * this.cellSize) + this.cellSize / 2, this.cellSize / 2, 5);
+        p5.text('s1', (this.s1.col * this.cellSize) - this.cellSize / 2 - 5, 2 * this.cellSize);
+        p5.circle((this.s2.col * this.cellSize) + this.cellSize / 2, this.cellSize / 2, 5);
         p5.text('s2', (this.s2.col * this.cellSize), 2 * this.cellSize);
 
-        p5.fill(0, 255, 0);
-        p5.circle((this.r1.col * this.cellSize) + this.cellSize / 2, this.cellSize / 2, 5, 10);
+        p5.fill("green");
+        p5.circle((this.r1.col * this.cellSize) + this.cellSize / 2, this.cellSize / 2, 5);
         p5.text('r1', (this.r1.col * this.cellSize), 2 * this.cellSize);
-        p5.circle((this.r2.col * this.cellSize) + this.cellSize / 2, this.cellSize / 2, 5, 10);
-        p5.text('r2', (this.r2.col * this.cellSize), 2 * this.cellSize);
+        p5.circle((this.r2.col * this.cellSize) + this.cellSize / 2, this.cellSize / 2, 5);
+        p5.text('r2', (this.r2.col * this.cellSize) + this.cellSize / 2 + 5, 2 * this.cellSize);
     }
 }
 

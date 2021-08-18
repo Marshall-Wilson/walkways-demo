@@ -70,6 +70,7 @@ class Solver {
                 approxPath = anglePath;
             }
         }
+        approxPath.color = "red";
         this.interval = setInterval(this.frame, 10000 / numAngles, map, p5, numAngles, counter);
         return [realPath, approxPath];
     }
@@ -79,11 +80,21 @@ class Solver {
             clearInterval(this.interval);
         } else {
             p5.redraw();
-            let anglePath = this.findAnglePath(map, counter.i * 2 * Math.PI / numAngles);
+            let angle = counter.i * 2 * Math.PI / numAngles;
+            let anglePath = this.findAnglePath(map, angle);
             anglePath.color = "blue";
             anglePath.drawPath(p5);
+            p5.fill("black");
+            p5.textSize(20);
+            p5.strokeWeight(0);
+            p5.text(angle.toPrecision(3), 0, 4 * map.cellSize / 3);
+            p5.strokeWeight(4);
+            p5.translate(3 * map.cellSize, map.cellSize);
+            p5.rotate(angle);
+            p5.line(0, 0, map.cellSize, 0);
+            p5.rotate(-1 * angle);
+            p5.translate(-3 * map.cellSize, -1 * map.cellSize);
             counter.i += 1
-            console.log(counter.i);
         }
     }
 
